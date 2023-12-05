@@ -1,11 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-let gradeSchema=new Schema({
-  date: Date,
-  grade: String,
-  score: Number
-
-})
 let resSchema= new Schema({
     address:{
         building:String,
@@ -16,7 +10,11 @@ let resSchema= new Schema({
     },
     borough:String,
     cuisine:String,
-    grades:[gradeSchema],
+    grades:[{
+      date: Date,
+      grade: String,
+      score: Number
+    }],
     name:String,
 });
 module.exports = mongoose.model('Restaurant', resSchema,"restaurants");
