@@ -30,6 +30,27 @@ const parseGrades = (value) => {
   }
 };
 
+// Validate Query Params Middleware
+const validateGetQueryParams = [
+
+  check("page").isNumeric().toInt().withMessage("Page Parameter should be integer!"),
+  check("perPage").isNumeric().toInt().withMessage("PerPage Parameter should be integer!"),
+  // check("borough").optional().custom(value => typeof value === 'string').withMessage("Borough Parameter should be string!"),
+
+  (req, res, next) => {
+
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // If there are validation errors, respond with a 400 status and the error messages
+      return res.status(400).json({ errors: errors.array() });
+    }
+    // If validation passes, continue to the next middleware or route handler
+    next();
+  }
+]
+
+// Validate post form data Middleware
 const validateRestaurantData = [
   body("address.building").notEmpty().withMessage("Building is required"),
   body("address.coord").isArray().withMessage("Coord must be an array"),
@@ -77,6 +98,40 @@ const validateRestaurantData = [
 router.route("/restaurant").post(validateRestaurantData, (req, res) => {
   res.send("data is validated");
 });
+
+// Pagination to fetch restaurant data 
+router.route("/restaurant").get(validateGetQueryParams, async (req, res) => {
+  try {
+
+    // Query Params
+    let page = req.query.page;
+    let perPage = req.query.perPage;
+
+    // Query for optional param, Borough
+    let query = {};
+    if (req.query.borough) {
+      // search with borough for both upper case and lowercase input
+      query.borough = { $regex: "^" + req.query.borough +"+$", $options: 'i' };
+    }
+
+    // Apply Pagination with Total number of data per page
+    let restaurantData = await Restaurant.find(query)
+      .skip((page - 1) * perPage) // Skip pages for pagination
+      .limit(perPage) // Fetch data per page
+      .exec();
+
+      if (restaurantData.length > 0) {
+        res.json(restaurantData);
+      } else {
+        res.status(404).json({ error: 'No restaurants found' });
+      }
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 //fetch restaurant
 router.route("/restaurant/:id").get(async function (req, res) {
   try {
@@ -90,9 +145,10 @@ router.route("/restaurant/:id").get(async function (req, res) {
     return res.send("Error" + err);
   }
 });
+
 //delete restaurant
-router.route("/restaurant").delete(function (req, res) {});
+router.route("/restaurant").delete(function (req, res) { });
 //update restaurant
-router.route("/restaurant").put(function (req, res) {});
+router.route("/restaurant").put(function (req, res) { });
 
 module.exports = router;
