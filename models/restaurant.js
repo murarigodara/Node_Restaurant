@@ -16,6 +16,7 @@ let resSchema= new Schema({
       score: Number
     }],
     name:String,
+    restaurant_id:String
 });
 module.exports = mongoose.model('Restaurant', resSchema,"restaurants");
 
