@@ -87,8 +87,8 @@ router.route("/restaurant").post(validateRestaurantData, (req, res) => {
     name: req.body.name,
     restaurant_id: req.body.restaurant_id,
   };
-  Restaurant.create(data);
-  res.send("data is validated").then(res=>{
+  Restaurant.create(data)
+  .then(res=>{
     if(res){
      return  res.send("<h1>Resturanent created successfully!"+res);
     }
