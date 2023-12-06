@@ -58,7 +58,23 @@ const validateRestaurantData = [
 ];
 //add new restaurant
 router.route("/restaurant").post(validateRestaurantData, (req, res) => {
-  res.send("data is validated");
+  let data={
+    address: req.body.address,
+    borough: req.body.borough,
+    cuisine: req.body.cuisine,
+    grades: JSON.parse(req.body.grades),
+    name: req.body.name,
+    restaurant_id: req.body.restaurant_id,
+  };
+  Restaurant.create(data);
+  res.send("data is validated").then(res=>{
+    if(res){
+     return  res.send("<h1>Resturanent created successfully!"+res);
+    }
+    else{
+      return res.send("<h1>Resturanent Is not created!");
+    }
+  })
 });
 //fetch restaurant record based on id
 router.route("/restaurant/:id").get(async function (req, res) {
