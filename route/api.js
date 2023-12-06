@@ -94,7 +94,7 @@ router.route("/restaurant").get(validateGetQueryParams, async (req, res) => {
     let query = {};
     if (req.query.borough) {
       // search with borough for both upper case and lowercase input
-      query.borough = { $regex: "^" + req.query.borough +"+$", $options: 'i' };
+      query.borough = { $regex: new RegExp(req.query.borough, 'i')  };
     }
 
     // Apply Pagination with Total number of data per page
