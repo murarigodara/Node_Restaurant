@@ -11,6 +11,7 @@ function containsOnlyDigits(str) {
   return digitsRegex.test(str);
 }
 let bcrypt=require('bcryptjs');
+const { graphql } = require("graphql");
 // router.use(express.json());
 const parseGrades = (value) => {
   try {
@@ -377,5 +378,9 @@ router.route('/search').get( (req,res)=>{
       console.error(error);
       res.status(500).send('Internal Server Error');
   }
+});
+
+router.route('/graphql').get((req,res)=>{
+    res.render('graphql');
 });
 module.exports = router;
