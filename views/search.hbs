@@ -1,0 +1,23 @@
+<div class="contentHome">
+<form method="post" action="http://localhost:8000/api/search">
+<div class="input-group mb-3">
+ 
+  
+  <div class="input-group mb-3">
+  <select class="form-select" id="seachBy" name="searchBy" aria-label="Example select with button addon">
+    <option selected value="">Search By : </option>
+    <option value="name">Name</option>
+    <option value="building">Building</option>
+    <option value="street">Street</option>
+    <option value="zipcode">Zipcode</option>
+    <option value="borough">Borough</option>
+    <option value="cuisine">Cuisine</option>
+    <option value="score">Average Score </option>
+    
+  </select>
+  <input type="text" class="form-control col-md-2" id="searchText"name="searchText" aria-label="Amount (to the nearest dollar)">
+   <button class="btn btn-outline-secondary" type="submit">Search</button>
+</div>
+</div>
+</form>
+</div>

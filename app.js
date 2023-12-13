@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var app= express();
 var port = process.env.PORT || 8000;
 // var route=require('./route/');
+require('dotenv').config();
 var bodyParser = require('body-parser');  
 var database = require('./config/database');
 var exphbs = require('express-handlebars');
@@ -19,7 +20,7 @@ app.engine('.hbs', exphbs.engine({
 
 app.set('view engine', 'hbs');
 mongoose.set('strictQuery', true);
-mongoose.connect(database.url);
+mongoose.connect(process.env.DATABASE_URL);
 app.use(bodyParser.urlencoded({'extended':'true'})); 
 app.use('/api',api);
 app.get('/', function (req, res) {
